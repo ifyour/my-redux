@@ -42,7 +42,6 @@ export function applyMiddleware(...middlewares) {
 			getState: store.getState,
 			dispatch: (...args) => dispatch(...args)
 		}
-		// 每一个 middleware 最终这样执行  middleware(midApi)(store.dispatch)(action)
 		const middlewareChain = middlewares.map(middleware => {
 			return middleware(midApi)// 执行中间件代码, 增强处理(处理异步, 特殊功能定制)
 		})
@@ -51,7 +50,7 @@ export function applyMiddleware(...middlewares) {
 		dispatch = compose(...middlewareChain)(store.dispatch)
 		return {
 			...store,
-			dispatch // 使用 能力增强的 dispatch 覆盖掉原装 store 中的dispatch
+			dispatch // 使用能力增强的 dispatch 覆盖掉原装 store 中的 dispatch
 		}
 	}
 }
