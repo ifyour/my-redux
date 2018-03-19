@@ -37,16 +37,17 @@ export function applyMiddleware(...middlewares) {
 	return createStore => (...args) => {
 		const store = createStore(...args)
 		let dispatch = store.dispatch
-
+		// midApi 暴露, 以实现本体 createStore 基本功能
 		const midApi = {
 			getState: store.getState,
 			dispatch: (...args) => dispatch(...args)
 		}
 		// 每一个 middleware 最终这样执行  middleware(midApi)(store.dispatch)(action)
 		const middlewareChain = middlewares.map(middleware => {
-			return middleware(midApi)
+			return middleware(midApi)// 执行中间件代码, 增强处理(处理异步, 特殊功能定制)
 		})
-		// console.log(compose(...middlewareChain)(store.dispatch))
+		// 对每个中间件的传入 store.dispatch, 即中间件中的 next
+		// 最终: middleware(midApi)(store.dispatch)(action)
 		dispatch = compose(...middlewareChain)(store.dispatch)
 		return {
 			...store,
