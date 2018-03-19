@@ -11,10 +11,9 @@ import { Provider } from './woniu-react-redux';
 const store = createStore(counter, applyMiddleware(arrThunk, thunk))
 ReactDOM.render(
   (
-      <Provider store={store}>
-        <App />
-      </Provider>
+    <Provider store={store}>
+      <App />
+    </Provider>
   ),
   document.getElementById('root')
 )
-

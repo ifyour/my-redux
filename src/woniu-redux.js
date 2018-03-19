@@ -30,7 +30,7 @@ export function createStore(reducer, enhancer) {
 }
 
 // 没有中间件的过程 action --> reducer
-// 有中间件的过程 action --> middleware --> reducer
+// 有中间件的过程 action --> middleware(增强 dispatch 处理异步, 日志记录等) --> reducer
 export function applyMiddleware(...middlewares) {
 	// 返回上面实现的 createStore 函数
 	// ...args 代表所有往 createStore 传入的参数即: reducer
