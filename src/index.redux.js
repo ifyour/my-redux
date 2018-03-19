@@ -1,6 +1,14 @@
+/**
+ * 当前 APP store 数据中心
+ */
+
+// action type
+// ------------------------------------
 const ADD = 'ADD'
 const REMOVE = 'REMOVE'
 
+// reducer
+// ------------------------------------
 export function counter(state = 10, action) {
   switch (action.type) {
     case ADD:
@@ -11,13 +19,20 @@ export function counter(state = 10, action) {
       return state
   }
 }
-export function add(){
-  return { type: ADD }
+
+// action
+// ------------------------------------
+export function add() {
+  return {
+    type: ADD
+  }
 }
-export function remove(){
-  return { type: REMOVE }
+export function remove() {
+  return {
+    type: REMOVE
+  }
 }
-export function addAsync(){
+export function addAsync() {
   return dispatch => {
     setTimeout(() => {
       dispatch(add());

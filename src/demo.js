@@ -1,36 +1,38 @@
-
+/**
+ * shouldComponentUpdate 对 setState 优化
+ */
 
 import React from 'react'
 
-class Demo extends React.Component{
-	constructor(props){
+class Demo extends React.Component {
+	constructor(props) {
 		super(props)
 		this.state = {
-			num:1,
-			name:'imooc'
+			num: 1,
+			name: 'imooc'
 		}
 		this.handleClick = this.handleClick.bind(this)
 	}
-	handleClick(){
+	handleClick() {
 		this.state.num = 1
 		this.setState({
-			num:this.state.num+1
+			num: this.state.num + 1
 		})
 	}
-	shouldComponentUpdate(nextProps, nextState){
+	shouldComponentUpdate(nextProps, nextState) {
 		// console.log(nextProps, nextState)
 		// console.log(this.props, this.state)
 		// if (nextState.num!=this.state.num) {
 		// 	return true
 		// }
-		if (nextState.num%5==0) {
+		if (nextState.num % 5 == 0) {
 			return true
 		}
 		return false
 		// console.log(this.state)
 		// return false
 	}
-	render(){
+	render() {
 		// this.setState()
 		return (
 			<div>

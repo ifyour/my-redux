@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { bindActionCreators } from './woniu-redux'
+import { bindActionCreators } from './woniu-redux'// 工具类方法, 给所有的 action 包装上 dispatch
 
 export const connect = (mapStateToProps=state=>state,mapDispatchToProps={})=>(WrapComponent)=>{
 	return class ConnectComponent extends React.Component{
@@ -46,7 +46,8 @@ export class Provider extends React.Component{
 	}
 	constructor(props, context){
 		super(props, context)
-		this.store = props.store
+		// 把从 createStore 中传入的 store 放入全局, 以供 connect 调用
+		this.store = props.store 
 	}
 	render(){
 		return this.props.children
