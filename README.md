@@ -30,7 +30,7 @@ ReactDOM.render(
 通过thunk中间件，我们就可以实现异步的action了。
 
 ```js
-export function addAsync(){
+export function addAsync() {
   return dispatch => {
     setTimeout(() => {
       dispatch(add())
@@ -52,27 +52,31 @@ export function addAsync(){
 我们已经说过中间件的作用就是通过改变dispatch方法来改变数据流，所以我们这里直接用enhancer对createStore方法进行装饰。Redux的源码也是这么写的，哈哈哈哈，怎么和我想到的一模一样呢？因为我看了Redux的源码。。
 
 ```js
-export function createStore (reducer，enhancer) {
+export function createStore(reducer， enhancer) {
   if (enhancer) {
     return enhancer(createStore)(reducer)
   }
   let state = {}
   let listeners = []
 
-  function getState () {
+  function getState() {
     return state
   }
-  function subscribe (listener) {
+
+  function subscribe(listener) {
     listeners.push(listener)
   }
-  function dispatch (action) {
+
+  function dispatch(action) {
     state = reducer(state, action)
     listeners.forEach(listener => listener())
     return action
   }
 
-  dispatch({type: '@myRedux'})
-  return {getState, subscribe, dispatch}
+  dispatch({
+    type: '@myRedux'
+  })
+  return { getState, subscribe, dispatch }
 }
 ```
 
@@ -87,7 +91,7 @@ export function createStore (reducer，enhancer) {
 看到这里，很简单嘛。但是注意，还记得我们是怎么使用异步的action的吗？
 
 ```js
-export function addAsync(){
+export function addAsync() {
   return (dispatch, getState) => {
     setTimeout(() => {
       dispatch(add())
@@ -101,21 +105,21 @@ export function addAsync(){
 都说到这里了，能不能自己写出来呢？
 
 ```js
-export function applyMiddleware (middleware){
-	return createStore => (...args) => {
-		const store = createStore(...args)
-		let dispatch = store.dispatch
+export function applyMiddleware(middleware) {
+  return createStore => (...args) => {
+    const store = createStore(...args)
+    let dispatch = store.dispatch
 
-		const midApi = {
-			getState: store.getState,
-			dispatch: (...args)=>dispatch(...args)
-		}
-		dispatch = middleware(midApi)(store.dispatch)
-		return {
-			...store,
-			dispatch
-		}
-	}
+    const midApi = {
+      getState: store.getState,
+      dispatch: (...args) => dispatch(...args)
+    }
+    dispatch = middleware(midApi)(store.dispatch)
+    return {
+      ...store,
+      dispatch
+    }
+  }
 }
 ```
 
@@ -126,11 +130,11 @@ export function applyMiddleware (middleware){
 其实自己的thunk很简单，正常的action的的返回值是个对象，前面已经说过，异步的action的返回值是一个函数，那么我们只需要判断一下action的返回的类型即可。
 
 ```js
-const thunk = ({dispatch, getState}) => next => action => {
-	if (typeof action === 'function') {
-		return action(dispatch, getState)
-	}
-	return next(action)
+const thunk = ({ dispatch, getState }) => next => action => {
+  if (typeof action === 'function') {
+    return action(dispatch, getState)
+  }
+  return next(action)
 }
 
 export thunk
@@ -147,14 +151,14 @@ action的类型是function，当触发这个dispatch的时候，就触发action�
 
 ```js
 const store = createStore(
-    reducer,
-    applyMiddleware(middlewareOne) (
-        middlewareTwo(
-          middlewareThree(
-              ...
-          )
-        )
+  reducer,
+  applyMiddleware(middlewareOne)(
+    middlewareTwo(
+      middlewareThree(
+        // ...
+      )
     )
+  )
 )
 ```
 
@@ -167,17 +171,17 @@ compose 做的只是让你在写深度嵌套的函数时，避免了代码的向
 compose方法的实现：
 
 ```js
-export function compose (...funcs){
-	if (funcs.length==0) {
-		return arg=>arg
-	}
-	if (funcs.length==1) {
-		return funcs[0]
-	}
-	return funcs.reduce((ret,item)=> (...args)=>{
-				console.log(ret)
-       return ret(item(...args))
-      })
+export function compose(...funcs) {
+  if (funcs.length == 0) {
+    return arg => arg
+  }
+  if (funcs.length == 1) {
+    return funcs[0]
+  }
+  return funcs.reduce((ret, item) => (...args) => {
+    // console.log(ret)
+    return ret(item(...args))
+  })
 }
 ```
 
@@ -186,37 +190,37 @@ compose不是那么复杂，关于如果想了解更多关于compose的知识，
 到这里我们可以使用多个中间件的applyMiddleware方法已经实现了，整个的applyMiddleware方法在这里：
 
 ```js
-export function applyMiddleware (...middlewares){
-	return createStore=>(...args)=>{
-		const store = createStore(...args)
-		let dispatch = store.dispatch
+export function applyMiddleware(...middlewares) {
+  return createStore => (...args) => {
+    const store = createStore(...args)
+    let dispatch = store.dispatch
 
-		const midApi = {
-			getState:store.getState,
-			dispatch:(...args)=>dispatch(...args)
-		}
-		const middlewareChain = middlewares.map(middleware=>{
-			return middleware(midApi)
-		})
-		console.log(compose(...middlewareChain)(store.dispatch))
-		dispatch = compose(...middlewareChain)(store.dispatch)
-		return {
-			...store,
-			dispatch
-		}
-	}
+    const midApi = {
+      getState: store.getState,
+      dispatch: (...args) => dispatch(...args)
+    }
+    const middlewareChain = middlewares.map(middleware => {
+      return middleware(midApi)
+    })
+    // console.log(compose(...middlewareChain)(store.dispatch))
+    dispatch = compose(...middlewareChain)(store.dispatch)
+    return {
+      ...store,
+      dispatch
+    }
+  }
 }
-export function compose(...funcs){
-	if (funcs.length==0) {
-		return arg=>arg
-	}
-	if (funcs.length==1) {
-		return funcs[0]
-	}
-	return funcs.reduce((ret,item)=> (...args)=>{
-				console.log(ret)
-       return ret(item(...args))
-      })
+export function compose(...funcs) {
+  if (funcs.length == 0) {
+    return arg => arg
+  }
+  if (funcs.length == 1) {
+    return funcs[0]
+  }
+  return funcs.reduce((ret, item) => (...args) => {
+    // console.log(ret)
+    return ret(item(...args))
+  })
 }
 ```
 
