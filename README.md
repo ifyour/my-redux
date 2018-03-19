@@ -53,7 +53,7 @@ export function createStore(reducer， enhancer) {
   if (enhancer) {
     return enhancer(createStore)(reducer)
   }
-  let state = {}
+  let state;
   let listeners = []
 
   function getState() {
@@ -69,10 +69,8 @@ export function createStore(reducer， enhancer) {
     listeners.forEach(listener => listener())
     return action
   }
-
-  dispatch({
-    type: '@myRedux'
-  })
+  // reducer 中匹配不到一个特殊的值, 所以就能拿到 reducer 中的 initState
+  dispatch({ type: '@@myRedux' })
   return { getState, subscribe, dispatch }
 }
 ```
