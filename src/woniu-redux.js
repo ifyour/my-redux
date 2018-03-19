@@ -56,7 +56,7 @@ export function applyMiddleware(...middlewares) {
 }
 
 // compose 的实际作用
-// compose(fn1, fn2 ,fn3)  => fn1(fn2(fn3))
+// compose(fn1, fn2 ,fn3)  返回:  () => fn1(fn2(fn3()))
 export function compose(...funcs) {
 	if (funcs.length === 0) {
 		return arg => arg
@@ -65,7 +65,7 @@ export function compose(...funcs) {
 		return funcs[0]
 	}
 	return funcs.reduce((ret, item) => (...args) => {
-		// console.log(ret)
+		// 循环2次, 第一个值放入 ret 中后, 最终: ()=>f1(fn2(f3()))
 		return ret(item(...args))
 	})
 }
