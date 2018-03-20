@@ -5,7 +5,7 @@ export function createStore (reducer, enhancer) {
   if (enhancer) {
     return enhancer(createStore)(reducer)
   }
-  let state = {}
+  let state
   let listeners = []
 
   function getState () {
