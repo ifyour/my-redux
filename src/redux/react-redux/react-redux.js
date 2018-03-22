@@ -1,6 +1,9 @@
+/**
+ * react-redux 简单实现
+ */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { bindActionCreators } from './woniu-redux'// 工具类方法, 给所有的 action 包装上 dispatch
+import { bindActionCreators } from '../redux'// 工具类方法, 给所有的 action 包装上 dispatch
 
 export const connect = (mapStateToProps = state => state, mapDispatchToProps = {}) => (WrapComponent) => {
 	return class ConnectComponent extends React.Component {

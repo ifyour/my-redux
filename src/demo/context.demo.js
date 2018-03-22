@@ -1,5 +1,5 @@
 /**
- * 介绍 React 全局 API  context 用法
+ * 介绍 React context API 用法
  */
 import React from 'react'
 import PropTypes from 'prop-types'

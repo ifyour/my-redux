@@ -1,7 +1,6 @@
 /**
- * shouldComponentUpdate 对 setState 优化
+ * 使用 shouldComponentUpdate 优化 setState
  */
-
 import React from 'react'
 
 class Demo extends React.Component {
@@ -43,14 +42,4 @@ class Demo extends React.Component {
 	}
 }
 
-
-
-
 export default Demo
-
-
-
-
-
-
-

@@ -1,3 +1,6 @@
+/**
+ * redux 简单实现
+ */
 export function createStore(reducer, enhancer) {
 	// console.log('createStore called!!!')
 	if (enhancer) {

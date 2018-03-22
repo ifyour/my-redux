@@ -1,8 +1,7 @@
 import React from 'react'
-// import { connect } from './react-redux'
 
-import { connect } from './woniu-react-redux'// 实现了 connect 和 Provider
-import { add, remove, addAsync } from './index.redux'
+import { connect } from './redux/react-redux/react-redux'// 实现了 connect 和 Provider
+import { add, remove, addAsync } from './store/index.redux'
 
 // 装饰器模式
 @connect(
