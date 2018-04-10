@@ -8,9 +8,9 @@ const LESS = 'LESS';
 // 创建 reducer
 function counter(state = 10, action) {
   switch (action.type) {
-    case 'add':
+    case ADD:
       return state + 1
-    case 'less':
+    case LESS:
       return state - 1
     default:
       return state
